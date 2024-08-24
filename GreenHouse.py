@@ -155,8 +155,6 @@ def control_system(data, crop_info):
 
     return fan_status, heater_status, irrigation_status, light_status
 
-
-# Function to update data periodically
 # Function to update data periodically
 def update_data_periodically(crop_info):
     global simulation_day, simulation_hour, current_day_period
@@ -190,23 +188,33 @@ def update_data_periodically(crop_info):
         # Update water level and refill status
         if irrigation_status == 'ON' and water_level > 0:
             water_level -= 5
+            if water_level < 0:
+                water_level = 0  # Ensure water level does not go below 0
 
         if water_level < 10:
             refill_status = 'ON'
-            refill_label.config(text="Refilling water...", bg='yellow')
+            refill_label.config(text="Refilling water...", bg='green', fg='white')
             refill_icon.itemconfig("icon", fill="green")
 
-            while water_level < 80:
-                water_level += 5
-                water_level_label.config(text=f"Water Level: {water_level}%")
+            while water_level < 100:
+                water_level += 10
+                if water_level > 100:
+                    water_level = 100  # Cap the water level at 100%
+                water_level_label.config(
+                    text=f"Water Level: {water_level}% ({get_water_status(water_level)})")
+                # Update the water level bar
                 water_level_canvas.coords(water_level_bar, 0, 100 - water_level, 30, 100)
-                water_level_canvas.itemconfig(water_level_bar, fill="green")
-                root.update()
+                root.update()  # Update the UI
                 time.sleep(1)
 
-            refill_label.config(text="Water Level Normal", bg='green')
+            refill_label.config(text="Water Refill: OFF", bg='red')
             refill_status = 'OFF'
             refill_icon.itemconfig("icon", fill="grey")
+
+        else:
+            water_level_label.config(
+                text=f"Water Level: {water_level}% ({get_water_status(water_level)})")
+            water_level_canvas.coords(water_level_bar, 0, 100 - water_level, 30, 100)
 
         # Update system status
         update_system_status(fan_status, fan_label, fan_icon, 'green', 'red')
@@ -227,13 +235,23 @@ def update_data_periodically(crop_info):
         # Determine the part of the day
         if sunrise_hour <= simulation_hour < 12:
             current_day_period = 'Morning'
-        elif 12 <= simulation_hour < 17:
+        elif 12 <= simulation_hour < 18:
             current_day_period = 'Afternoon'
         else:
             current_day_period = 'Evening'
 
         root.update_idletasks()  # Ensures UI updates are processed
         time.sleep(time_per_hour)
+
+# Function to get water status based on water level
+def get_water_status(water_level):
+    if water_level > 80:
+        return "Full"
+    elif 30 <= water_level <= 80:
+        return "Normal"
+    else:
+        return "Low"
+
 
 # Function to update system status
 def update_system_status(status, label, icon, on_color, off_color):
@@ -287,14 +305,15 @@ water_level_label = tk.Label(root, text="Water Level: ", font=('Helvetica', 14))
 water_level_label.pack(pady=5)
 water_level_canvas = tk.Canvas(root, width=30, height=100, bg='white')
 water_level_canvas.pack(pady=5)
-water_level_bar = water_level_canvas.create_rectangle(0, 100, 30, 100, fill="blue")
+water_level_bar = water_level_canvas.create_rectangle(0, 100, 30, 100, fill="white")
+water_level_bar = water_level_canvas.create_rectangle(0, 100, 30, 0, fill="blue")
 
 # Create refill status label and icon
-refill_label = tk.Label(root, text="Water Level Normal", font=('Helvetica', 12), bg='green')
+refill_label = tk.Label(root, text="Water Refill: OFF", font=('Helvetica', 14, 'bold'), bg='red')
 refill_label.pack(pady=5)
 refill_icon = tk.Canvas(root, width=30, height=30)
 refill_icon.pack()
-refill_icon.create_oval(5, 5, 25, 25, fill="grey", tags="icon")
+refill_icon.create_oval(5, 5, 25, 25, fill="red", tags="icon")
 
 
 # Create frames for control systems with labels and icons
