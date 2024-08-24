@@ -1,8 +1,9 @@
 import tkinter as tk
 from threading import Thread
-from datetime import datetime
+#from datetime import datetime
 import time
 from PIL import Image, ImageTk  # Make sure to install Pillow library
+from tkinter import messagebox
 
 # Crop data with ideal conditions, planting start month, and harvesting month
 crop_data = {
@@ -225,27 +226,27 @@ def update_data_periodically(crop_info):
 
         if water_level < 10:
             refill_status = 'ON'
-            refill_label.config(text="Refilling water...", bg='green', fg='white')
-            refill_icon.itemconfig("icon", fill="green")
+            refill_label.config(text="Refilling water tank...", bg='#26c6da', fg='black')
+            refill_icon.itemconfig("icon", fill="#003300")
 
             while water_level < 100:
                 water_level += 10
                 if water_level > 100:
                     water_level = 100  # Cap the water level at 100%
                 water_level_label.config(
-                    text=f"Water Level: {water_level}% ({get_water_status(water_level)})")
+                    text=f"Tank Water Level: {water_level}% ({get_water_status(water_level)})")
                 # Update the water level bar
                 water_level_canvas.coords(water_level_bar2, 0, 100 - water_level, 30, 100)
                 root.update()  # Update the UI
                 time.sleep(1)
 
-            refill_label.config(text="Water Refill: OFF", bg='red')
+            refill_label.config(text="Water Refill: OFF", bg='#26c6da', bd=4, fg='black')
             refill_status = 'OFF'
-            refill_icon.itemconfig("icon", fill="grey")
+            refill_icon.itemconfig("icon", fill="red")
 
         else:
             water_level_label.config(
-                text=f"Water Level: {water_level}% ({get_water_status(water_level)})")
+                text=f"Tank Water Level: {water_level}% ({get_water_status(water_level)})")
             water_level_canvas.coords(water_level_bar2, 0, 100 - water_level, 30, 100)
 
         # Update system status
@@ -328,7 +329,7 @@ root.config(bg='#26c6da')
 
 
 # Set the window size
-root.geometry("900x900")
+root.geometry("930x1000")
 
 
 # Create and place sensor data labels
@@ -343,17 +344,17 @@ light_label.grid(row=3, column=4)
 
 
 # Create water level indicator
-water_level_label = tk.Label(root, text="Water Level: ", width=20, font=('Helvetica', 20), fg='black', bg='#26c6da')
-water_level_label.grid(row=4, column=4, pady=20)
+water_level_label = tk.Label(root, text="Tank Water Level: ", width=25, font=('Helvetica', 20), fg='black', bg='#26c6da')
+water_level_label.grid(row=5, column=4, pady=20)
 water_level_canvas = tk.Canvas(root, width=30, height=100, bg='white')
 water_level_canvas.grid(row=6, column=4)
 water_level_bar = water_level_canvas.create_rectangle(0, 100, 30, 100, fill="white")
 water_level_bar2 = water_level_canvas.create_rectangle(0, 100, 30, 0, fill="blue")
 
 
-# Create refill status label and icon
-refill_label = tk.Label(root, text="Water Refill: OFF", width=20, font=('Helvetica', 20, 'bold'), bd=2, bg='#26c6da', fg='black')
-refill_label.grid(row=7, column=4)
+# Create refill status label with border
+refill_label = tk.Label(root, text="Water Refill: OFF", width=20, font=('Helvetica', 20, 'bold'), bd=4, relief='solid', bg='#26c6da', fg='black')
+refill_label.grid(row=7, column=4, padx=10, pady=10)  # Added padding for spacing
 refill_icon = tk.Canvas(root, width=30, height=30, bg='#e0f7fa', bd=2, relief='solid')
 refill_icon.grid(row=8, column=4)
 refill_icon.create_oval(5, 5, 34, 34, fill="red", tags="icon")
@@ -370,7 +371,7 @@ def create_system_frame(system_name, row, col, bg_color):
 
     # Create labels for system status
     status_label = tk.Label(inner_frame, text=f"{system_name}: OFF", font=('Helvetica', 20, 'bold'), width=20, bg=bg_color, fg='black', bd=4, relief='solid')
-    status_label.grid(row=0, column=0, pady=20)
+    status_label.grid(row=0, column=0, pady=10)
 
     # Create icon canvas
     icon_canvas = tk.Canvas(inner_frame, width=30, height=30, bg='#e0f7fa', bd=2, relief='solid')
@@ -399,14 +400,41 @@ lights_label, light_icon = create_system_frame("Light", 3, 0, lights_color)
 crop_selection = tk.StringVar()
 crop_selection.set("Select Crop")
 
+# Initialize confirmation message as an empty string
+confirmation_message = tk.StringVar()
+confirmation_message.set("")  # This hides the confirmation message initially
+
+# Function to handle crop selection
+def select_crop():
+    selected_crop = crop_selection.get()
+    if selected_crop == "Select Crop":
+        # Inform the user that they need to select a crop
+        messagebox.showwarning("Selection Error", "Please select a crop first.")
+    else:
+        # Display a confirmation message in the label
+        confirmation_message.set(f"Selected Crop: {selected_crop}")
+        start_button.config(state=tk.NORMAL)  # Enable the Start Simulation button
+
+        # Hide the confirmation message after 3 seconds (3000 milliseconds)
+        root.after(1500, hide_message)
+
+
+def hide_message():
+    confirmation_message.set("")  # Clear the confirmation message
+
 # Create an OptionMenu with a colored border
 crop_menu = tk.OptionMenu(root, crop_selection, *crop_data.keys())
 crop_menu.config(bd=0, font=('Helvetica', 18), width=20, height=0, highlightbackground="#26c6da", highlightcolor="#26c6da", highlightthickness=0)
-crop_menu.grid(row=0, column=9)
+crop_menu.grid(row=0, column=9, padx=5, pady=5)
 
-# Button to confirm crop selection and display planting start date with a colored border
+# Label to display crop selection confirmation, placed at row 4, column 4
+confirmation_message = tk.StringVar()
+confirmation_label = tk.Label(root, textvariable=confirmation_message, font=('Arial', 18, 'bold'), bg='#26c6da', fg='orange')
+confirmation_label.grid(row=4, column=9, padx=5, pady=5)
+
+# Button to confirm crop selection
 select_crop_button = tk.Button(root, text="Select Crop", font=('Arial', 18), width=20, command=select_crop, fg='black', bg='#26c6da', bd=5, highlightbackground="#26c6da", highlightcolor="#26c6da", highlightthickness=5)
-select_crop_button.grid(row=1, column=9)
+select_crop_button.grid(row=1, column=9, pady=5)
 
 
 # Current month label
@@ -425,15 +453,36 @@ select_crop_button.grid(row=1, column=9)
 
 
 # Simulation time and part of day labels
-simulation_time_label = tk.Label(root, text="Simulation Time: ", width=25, font=('Helvetica', 18), fg='black', bg='#26c6da')
+simulation_time_label = tk.Label(root, text="Simulation Time: ", width=25, font=('Helvetica', 20), fg='black', bg='#26c6da')
 simulation_time_label.grid(row=2, column=9)
-day_period_label = tk.Label(root, text="Part of Day: ", width=25, font=('Helvetica', 18), fg='black', bg='#26c6da')
+day_period_label = tk.Label(root, text="Part of Day: ", width=25, font=('Helvetica', 20), fg='black', bg='#26c6da')
 day_period_label.grid(row=3, column=9)
 
+simulation_start_message = tk.StringVar()
+simulation_start_message.set("")  # This hides the simulation start message initially
+
+simulation_start_label = tk.Label(root, textvariable=simulation_start_message, font=('Arial', 18, 'bold'), bg='#26c6da', fg='orange')
+simulation_start_label.grid(row=4, column=4, padx=10, pady=10)
+# Create a Start button for simulation with functionality
+def start_simulation():
+    selected_crop = crop_selection.get()
+    if selected_crop:
+        crop_info = crop_data[selected_crop]
+        Thread(target=update_data_periodically, args=(crop_info,), daemon=True).start()
+
+        # Display a confirmation message
+        simulation_start_message.set("Simulation Started")
+
+        # Hide the confirmation message after 3 seconds (3000 milliseconds)
+        root.after(1500, hide_simulation_start_message)
+
+
+def hide_simulation_start_message():
+    simulation_start_message.set("")  # Clear the simulation start message
 
 # Start simulation button
-start_button = tk.Button(root, text="Start Simulation", width=40, font=('Arial', 26), command=start_simulation, fg='black', bg='#26c6da')
-start_button.grid(row=9, columnspan=15)
+start_button = tk.Button(root, text="Start Simulation", justify='center', width=40, font=('Arial', 26), command=start_simulation, fg='black', bg='#26c6da')
+start_button.grid(row=10, columnspan=18, pady=10)
 
 tomato_image_label = tk.Label(root, bg='#26c6da')
 tomato_image_label.grid(row=12, column=4, rowspan=6)
