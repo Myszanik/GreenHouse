@@ -185,30 +185,30 @@ def update_tomato_image(day):
     if stage >= len(tomato_images):
         stage = len(tomato_images) - 1  # Show last image if exceeding the range
     img = load_image(tomato_images[stage])
-    img = img.resize((300, 300))  # Resize image to fit the label
+    img = img.resize((250, 250))  # Resize image to fit the label
     img = ImageTk.PhotoImage(img)
-    tomato_image_label.config(image=img)
-    tomato_image_label.image = img
+    image_label.config(image=img)
+    image_label.image = img
 
 def update_cucumber_image(day):
     stage = day // 2  # Show image every 2 days
     if stage >= len(cucumber_images):
         stage = len(cucumber_images) - 1  # Show last image if exceeding the range
     img = load_image(cucumber_images[stage])
-    img = img.resize((300, 300))  # Resize image to fit the label
+    img = img.resize((250, 250))  # Resize image to fit the label
     img = ImageTk.PhotoImage(img)
-    cucumber_image_label.config(image=img)
-    cucumber_image_label.image = img
+    image_label.config(image=img)
+    image_label.image = img
 
 def update_strawberry_image(day):
     stage = day // 2  # Show image every 2 days
     if stage >= len(strawberry_images):
         stage = len(strawberry_images) - 1  # Show last image if exceeding the range
     img = load_image(strawberry_images[stage])
-    img = img.resize((300, 300))  # Resize image to fit the label
+    img = img.resize((150, 150))  # Resize image to fit the label
     img = ImageTk.PhotoImage(img)
-    strawberry_image_label.config(image=img)
-    strawberry_image_label.image = img
+    image_label.config(image=img)
+    image_label.image = img
 
 # Function to generate sensor data based on the selected crop and time of day
 def generate_sensor_data(crop_info, current_hour):
@@ -351,8 +351,7 @@ def update_data_periodically(crop_info):
             update_tomato_image(simulation_day)
 
         # Check if it's time to show the "Ready to Harvest" button
-        if simulation_day == 15 and simulation_hour == 10:
-            start_button.grid_forget()
+        if simulation_day == 15 and simulation_hour == 8:
             harvest_button.grid(row=10, columnspan=18, pady=10)  # Show the button in the main thread
             break
 
@@ -435,16 +434,16 @@ sensor_frame.grid(row=0, column=4, rowspan=4, padx=0, pady=10, sticky='nsew')
 sensor_frame.grid_propagate(False)
 
 # Create and place the labels inside the frame
-temp_label = tk.Label(sensor_frame, text="Temperature: ", width=25, bg='#1ea0b3', font=('Helvetica', 20), fg='black')
+temp_label = tk.Label(sensor_frame, text="Temperature: ", width=25, bg='#1ea0b3', font=('Consolas', 20, 'bold'), fg='black')
 temp_label.grid(row=0, column=0, pady=5)
 
-hum_label = tk.Label(sensor_frame, text="Humidity: ", width=25, bg='#1ea0b3', font=('Helvetica', 20), fg='black')
+hum_label = tk.Label(sensor_frame, text="Humidity: ", width=25, bg='#1ea0b3', font=('Consolas', 20, 'bold'), fg='black')
 hum_label.grid(row=1, column=0, pady=5)
 
-soil_label = tk.Label(sensor_frame, text="Soil Moisture: ", width=25, bg='#1ea0b3', font=('Helvetica', 20), fg='black')
+soil_label = tk.Label(sensor_frame, text="Soil Moisture: ", width=25, bg='#1ea0b3', font=('Consolas', 20, 'bold'), fg='black')
 soil_label.grid(row=2, column=0, pady=5)
 
-light_label = tk.Label(sensor_frame, text="Light: ", width=25, bg='#1ea0b3', font=('Helvetica', 20), fg='black')
+light_label = tk.Label(sensor_frame, text="Light: ", width=25, bg='#1ea0b3', font=('Consolas', 20, 'bold'), fg='black')
 light_label.grid(row=3, column=0, pady=5)
 
 # Adjust row and column weights for the root grid to make sure the frame expands if the window is resized
@@ -478,7 +477,7 @@ water_frame.grid(row=5, column=4, rowspan=4, padx=0, pady=0, sticky='nsew')
 # Make sure the frame does not resize itself based on its contents
 water_frame.grid_propagate(False)
 
-water_level_label = tk.Label(root, text="Tank Water Level: ", width=27, font=('Verdana', 18), fg='black', bg='#1ea0b3')
+water_level_label = tk.Label(root, text="Tank Water Level: ", width=27, font=('Consolas', 18, 'bold'), fg='black', bg='#1ea0b3')
 water_level_label.grid(row=5, column=4, pady=15)
 water_level_canvas = tk.Canvas(root, width=30, height=100, bg='white')
 water_level_canvas.grid(row=6, column=4)
@@ -487,7 +486,7 @@ water_level_bar2 = water_level_canvas.create_rectangle(0, 100, 30, 0, fill="blue
 
 
 # Create refill status label with border
-refill_label = tk.Label(root, text="Water Refill: OFF", width=20, font=('Helvetica', 20, 'bold'), bd=4, relief='solid', bg='#1ea0b3', fg='black')
+refill_label = tk.Label(root, text="Water Refill: OFF", width=20, font=('Droid Sans', 20, 'bold'), bd=4, relief='solid', bg='#1ea0b3', fg='black')
 refill_label.grid(row=7, column=4, padx=10, pady=0)  # Added padding for spacing
 refill_icon = tk.Canvas(root, width=30, height=30, bg='#e0f7fa', bd=2, relief='solid')
 refill_icon.grid(row=8, column=4, pady=15)
@@ -518,7 +517,7 @@ def create_system_frame(system_name, row, col, bg_color):
     inner_frame.pack(padx=5, pady=5, fill='both', expand=True)  # Adding padding inside the border
 
     # Create labels for system status
-    status_label = tk.Label(inner_frame, text=f"{system_name}: OFF", font=('Helvetica', 20, 'bold'), width=25, bg=colors[system_name], fg='black', bd=3, relief='solid')
+    status_label = tk.Label(inner_frame, text=f"{system_name}: OFF", font=('Droid Sans', 20, 'bold'), width=20, bg=colors[system_name], fg='black', bd=3, relief='solid')
     status_label.grid(row=0, column=0, pady=10)
 
     # Create icon canvas
@@ -566,7 +565,7 @@ def select_crop():
         start_button.config(state=tk.NORMAL)  # Enable the Start Simulation button
 
         # Hide the confirmation message after 3 seconds (3000 milliseconds)
-        root.after(1500, hide_message)
+        root.after(2000, hide_message)
 
 
 def hide_message():
@@ -590,17 +589,17 @@ sensor_frame.grid_propagate(False)
 
 # Create an OptionMenu with a colored border
 crop_menu = tk.OptionMenu(root, crop_selection, *crop_data.keys())
-crop_menu.config(bd=0, font=('Verdana', 18), width=20, height=0, highlightbackground="#1ea0b3", highlightcolor="#1ea0b3", highlightthickness=0)
+crop_menu.config(bd=0, font=('Consolas', 20, 'bold'), width=20, height=0, highlightbackground="#1ea0b3", highlightcolor="#1ea0b3", highlightthickness=0)
 crop_menu.grid(row=0, column=9, padx=5, pady=5)
 
 # Button to confirm crop selection
-select_crop_button = tk.Button(root, text="Select Crop", font=('Verdana', 18), width=18, command=select_crop, fg='black', bg='#1ea0b3', bd=5, highlightbackground="#1ea0b3", highlightcolor="#1ea0b3", highlightthickness=5)
+select_crop_button = tk.Button(root, text="Select Crop", font=('Consolas', 20, 'bold'), width=18, command=select_crop, fg='black', bg='#1ea0b3', bd=5, highlightbackground="#1ea0b3", highlightcolor="#1ea0b3", highlightthickness=5)
 select_crop_button.grid(row=1, column=9, pady=5)
 
 # Simulation time and part of day labels
-simulation_time_label = tk.Label(root, text="Simulation Time: ", width=25, font=('Verdana', 18), fg='black', bg='#1ea0b3')
+simulation_time_label = tk.Label(root, text="Simulation Time: ", width=25, font=('Consolas', 20, 'bold'), fg='black', bg='#1ea0b3')
 simulation_time_label.grid(row=2, column=9)
-day_period_label = tk.Label(root, text="Part of Day: ", width=25, font=('Verdana', 18), fg='black', bg='#1ea0b3')
+day_period_label = tk.Label(root, text="Part of Day: ", width=25, font=('Consolas', 20, 'bold'), fg='black', bg='#1ea0b3')
 day_period_label.grid(row=3, column=9)
 
 # Adjust row and column weights for the root grid to make sure the frame expands if the window is resized
@@ -620,13 +619,13 @@ crop_frame.grid_columnconfigure(0, weight=1)
 
 # Label to display crop selection confirmation, placed at row 4, column 4
 confirmation_message = tk.StringVar()
-confirmation_label = tk.Label(root, textvariable=confirmation_message, font=('Roboto Condensed', 23, 'bold'), bg='#1ea0b3', fg='green')
+confirmation_label = tk.Label(root, textvariable=confirmation_message, font=('Roboto Condensed', 23, 'bold'), bg='#1ea0b3', fg='orange')
 confirmation_label.grid(row=4, column=9, padx=5, pady=5)
 
 simulation_start_message = tk.StringVar()
 simulation_start_message.set("")  # This hides the simulation start message initially
 
-simulation_start_label = tk.Label(root, textvariable=simulation_start_message, font=('Roboto Condensed', 23, 'bold'), bg='#1ea0b3', fg='green')
+simulation_start_label = tk.Label(root, textvariable=simulation_start_message, font=('Roboto Condensed', 23, 'bold'), bg='#1ea0b3', fg='orange')
 simulation_start_label.grid(row=4, column=4, padx=10, pady=10)
 # Create a Start button for simulation with functionality
 def start_simulation():
@@ -634,12 +633,13 @@ def start_simulation():
     if selected_crop:
         crop_info = crop_data[selected_crop]
         Thread(target=update_data_periodically, args=(crop_info,), daemon=True).start()
+        image_label.grid(row=12, column=4, rowspan=6)
 
         # Display a confirmation message
         simulation_start_message.set("Simulation Started")
 
         # Hide the confirmation message after 3 seconds (3000 milliseconds)
-        root.after(1500, hide_simulation_start_message)
+        root.after(2000, hide_simulation_start_message)
 
 
 def hide_simulation_start_message():
@@ -650,7 +650,7 @@ harvest_message = tk.StringVar()
 harvest_message.set("")  # Initially, hide the harvest message
 
 # Step 2: Create a Label to display the harvest message
-harvest_label = tk.Label(root, textvariable=harvest_message, font=('Roboto Condensed', 23, 'bold'), bg='#1ea0b3', fg='green')
+harvest_label = tk.Label(root, textvariable=harvest_message, font=('Roboto Condensed', 21, 'bold'), bg='#1ea0b3', fg='orange')
 harvest_label.grid(row=4, column=0, padx=10, pady=10)  # Adjust row and column as needed
 
 def harvest():
@@ -662,6 +662,7 @@ def harvest():
         root.after(2500, clear_harvest_message)  # Clear the message after 3 seconds
         harvest_button.grid_forget()  # Hide the harvest button
         start_button.grid(row=10, columnspan=18, pady=10)  # Show the start button
+        image_label.grid_forget()
         root.update_idletasks()
 
 
@@ -677,14 +678,8 @@ start_button.grid(row=10, columnspan=18, pady=10)
 harvest_button = tk.Button(root, text="Ready to Harvest", justify='center', width=40, font=('Arial', 26), command=harvest, fg='black', bg='#1ea0b3')
 start_button.grid(row=10, columnspan=18, pady=10)
 
-tomato_image_label = tk.Label(root, bg='#1ea0b3')
-tomato_image_label.grid(row=12, column=4, rowspan=6)
-
-cucumber_image_label = tk.Label(root, bg='#1ea0b3')
-cucumber_image_label.grid(row=12, column=4, rowspan=6)
-
-strawberry_image_label = tk.Label(root, bg='#1ea0b3')
-strawberry_image_label.grid(row=12, column=4, rowspan=6)
+image_label = tk.Label(root, bg='#1ea0b3')
+image_label.grid(row=12, column=4, rowspan=6)
 
 # Start the Tkinter main loop
 root.mainloop()
