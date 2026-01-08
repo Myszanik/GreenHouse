@@ -4,6 +4,10 @@ from threading import Thread
 import time
 from PIL import Image, ImageTk  # Make sure to install Pillow library
 from tkinter import messagebox
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+ASSETS_DIR = BASE_DIR / "assets"
 
 # Crop data with ideal conditions, planting start month, and harvesting month
 crop_data = {
@@ -143,39 +147,11 @@ time_per_hour = 1  # Seconds in simulation for one hour
 sunrise_hour = 8
 sunset_hour = 18
 
-tomato_images = [
-    "/Users/dom/Desktop/Vegetables/Tomato/stage0-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Tomato/stage1-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Tomato/stage2-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Tomato/stage3-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Tomato/stage4-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Tomato/stage5-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Tomato/stage6-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Tomato/stage7-removebg-preview.png"
-]
+tomato_images = [ASSETS_DIR / "Tomato" / f"stage{i}-removebg-preview.png" for i in range(8)]
 
-cucumber_images = [
-    "/Users/dom/Desktop/Vegetables/Cucumber/stage0-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Cucumber/stage1-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Cucumber/stage2-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Cucumber/stage3-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Cucumber/stage4-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Cucumber/stage5-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Cucumber/stage6-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Cucumber/stage7-removebg-preview.png"
-]
+cucumber_images = [ASSETS_DIR / "Cucumber" / f"stage{i}-removebg-preview.png" for i in range(8)]
 
-strawberry_images = [
-    "/Users/dom/Desktop/Vegetables/Strawberry/stage0-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Strawberry/stage1-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Strawberry/stage2-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Strawberry/stage3-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Strawberry/stage4-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Strawberry/stage5-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Strawberry/stage5-removebg-preview.png",
-    "/Users/dom/Desktop/Vegetables/Strawberry/stage6-removebg-preview.png"
-]
-
+strawberry_images = [ASSETS_DIR / "Strawberry" / f"stage{i}-removebg-preview.png" for i in range(8)]
 
 def load_image(image_path):
     return Image.open(image_path)
