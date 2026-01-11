@@ -54,19 +54,19 @@ Python packages (installed via `requirements.txt`):
    git clone https://github.com/Myszanik/GreenHouse.git
 2. **Navigate to the Project Directory**
    ```bash
-   cd <GreenHouse>
+   cd GreenHouse
 3. **Create a virtual environment (recommended)**
    ```bash
    python -m venv .venv
 4. **Activate the virtual environment**
    ```bash
-   source .venv/bin/activate
+   .\.venv\Scripts\activate.bat
 5. **Install Dependencies**
    ```bash
    python -m pip install -r requirements.txt
 6. **Run the Application**
    ```bash
-   python3 GreenHouse.py
+   python GreenHouse.py
 
 ## Notes
 - Make sure the `assets/` folder exists and includes the crop image stages, otherwise the app may fail when it tries to load images.
