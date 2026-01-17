@@ -47,25 +47,25 @@ The Smart Greenhouse System provides a GUI where you can:
 Python packages (installed via `requirements.txt`):
 - `Pillow`
 
-## Setup
+## Setup (Windows, PowerShell)
 
 1. **Clone the repository**
-   ```bash
+   ```powershell
    git clone https://github.com/Myszanik/GreenHouse.git
 2. **Navigate to the Project Directory**
-   ```bash
+   ```powershell
    cd GreenHouse
 3. **Create a virtual environment (recommended)**
-   ```bash
+   ```powershell
    python -m venv .venv
-4. **Activate the virtual environment**
-   ```bash
-   .\.venv\Scripts\activate.bat
-5. **Install Dependencies**
-   ```bash
+   ```
+   ```powershell
+   .\.venv\Scripts\Activate.ps1
+4. **Install Dependencies**
+   ```powershell
    python -m pip install -r requirements.txt
-6. **Run the Application**
-   ```bash
+5. **Run the Application**
+   ```powershell
    python GreenHouse.py
 
 ## Notes
