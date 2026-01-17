@@ -73,6 +73,14 @@ Python packages (installed via `requirements.txt`):
 - Simulation speed is controlled by `time_per_hour` in the code (default is 1 second = 1 simulated hour).
 - The simulation currently stops when the “Ready to Harvest” button becomes available.
 
+## Screenshots
+
+### Simulation running (live sensor values + automated actions)
+![Simulation running](screenshots/running.png)
+
+### Harvest ready (end of growth cycle)
+![Harvest ready](screenshots/harvest.png)
+
 ## Acknowledgements
 - `tkinter`, for the GUI
 - `Pillow`, for loading and displaying crop images
